@@ -3,10 +3,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = {
-    entry: "./src/client.js",
+    mode: process.env.NODE_ENV || 'development',
+    entry: './src/client.js',
     output: {
         path: __dirname,
-        filename: "build/bundle.js"
+        filename: 'build/bundle.js'
     },
     resolve: {
         extensions: ['.js', '.marko']
