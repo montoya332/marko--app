@@ -16,3 +16,24 @@ coverage
 
 mb*.log
 logs
+
+
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.marko.js
+*.sublime-workspace
+*.sublime-project
+*.original
+
+/lib-cov
+/pids
+/logs
+/results
+/static
+/build
+/.cache
+
+npm-debug.log
