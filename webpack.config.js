@@ -4,13 +4,14 @@ const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = {
     mode: process.env.NODE_ENV || 'development',
-    entry: './src/client.js',
+    entry: "./src/pages/home/client.js",
     output: {
         path: __dirname,
-        filename: 'build/bundle.js'
+        filename: 'static/bundle.js'
     },
     resolve: {
-        extensions: ['.js', '.marko']
+        extensions: ['.js', '.marko'],
+        modules: ['./', 'node_modules']
     },
     module: {
         rules: [
@@ -19,21 +20,32 @@ module.exports = {
             use: 'marko-loader'
         },
         {
-        test: /\.(sa|sc|le|c)ss$/,
-        use: [
-          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
-          'less-loader',
-          'postcss-loader',
-          'sass-loader',
-        ],
-      }
+            test: /\.(sa|sc|c|le)ss$/,
+            use: [
+            devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+            'css-loader',
+            'less-loader',
+            'sass-loader',
+            ],
+        }, 
+        {
+            test: /\.svg/,
+            loader: 'svg-url-loader'
+        },
+        {
+            test: /\.(jpg|jpeg|gif|png)$/,
+            loader: 'file-loader',
+            query: {
+                name: 'static/images/[hash].[ext]',
+                publicPath: '/'
+            }
+        }
         ]
     },
     plugins: [
-        new MiniCssExtractPlugin({
-          filename: devMode ? '[name].css' : '[name].[hash].css',
-          chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
-        })
+    new MiniCssExtractPlugin({
+        filename: devMode ? 'static/styles/[name].css' : 'static/styles/[name].[hash].css',
+        chunkFilename: devMode ? 'static/styles/[id].css' : 'static/styles/[id].[hash].css',
+    })
     ]
 };

@@ -1,0 +1,6 @@
+{
+    "dependencies": [
+        "sass-import: variables.scss",
+        "style.scss"
+    ]
+}

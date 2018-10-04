@@ -1,0 +1,55 @@
+<div>
+    <app-sections>
+        <@section title="Buttons">
+            <table class="table">
+                <tr>
+                    <td><b>Button Tags: </b></td>
+                    <td>
+                        <app-button variant="primary">Primary</app-button>
+                        <app-button variant="secondary">Secondary</app-button>
+                        <app-button variant="success">Success</app-button>
+                        <app-button variant="danger">Danger</app-button>
+                        <app-button variant="warning">Warning</app-button>
+                        <app-button variant="info">Info</app-button>
+                        <app-button variant="light">Light</app-button>
+                        <app-button variant="dark">Dark</app-button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Outline buttons:&nbsp;</b></td>
+                    <td>
+                        <app-button variant="outline-primary">Primary</app-button>
+                        <app-button variant="outline-secondary">Secondary</app-button>
+                        <app-button variant="outline-success">Success</app-button>
+                        <app-button variant="outline-danger">Danger</app-button>
+                        <app-button variant="outline-warning">Warning</app-button>
+                        <app-button variant="outline-info">Info</app-button>
+                        <app-button variant="outline-light">Light</app-button>
+                        <app-button variant="outline-dark">Dark</app-button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Change Button Size:&nbsp;</b></td>
+                    <td>
+                    <app-button label="${state.buttonSize||'normal'}"
+                        size=state.buttonSize
+                        variant="primary"
+                        onClick("handleChangeButtonSizeClick")/>
+                    </td>
+                </tr> 
+                <tr>
+                    <td><b>Change Button Variant:&nbsp;</b></td>
+                    <td>
+                    <app-button label="${state.buttonVariant}"
+                        variant=state.buttonVariant
+                        onClick("handleChangeButtonVariantClick")/>
+                    </td>
+                </tr>
+            </table>
+
+            <div>
+                
+            </div>
+        </@section>
+    </app-sections>
+</div>

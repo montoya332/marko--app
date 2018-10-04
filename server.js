@@ -25,12 +25,12 @@ var port = process.env.PORT || 8080;
 app.use(compression());
 
 // Allow all of the generated files under "static" to be served up by Express
-app.use('/public', serveStatic(__dirname + '/public'));
+app.use('/static', serveStatic(__dirname + '/static'));
 
-//require('src/services/routes')(app);
+require('src/services/routes')(app);
 
 // Map the "/" route to the home page
-app.get('/', require('src'));
+app.get('/', require('src/pages/home'));
 
 app.listen(port, function(err) {
     if (err) {

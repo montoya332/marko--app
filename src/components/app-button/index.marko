@@ -1,0 +1,33 @@
+class {
+    onInput(input) {
+        return {
+            block: input.block || '',
+            size: input.size || '',
+            variant: input.variant || 'primary',
+            body: input.label || input.renderBody,
+            className: input['class']
+        };
+    }
+
+    handleClick(event) {
+        this.emit('click', {
+            event: event 
+        });
+    }
+}
+
+$ var variantClassName = (input.variant && 'btn-' + input.variant);
+$ var sizeClassName = (input.size && 'btn-' + input.size);
+$ var blockClassName = (input.block && 'btn-block');
+
+<button class=[
+        'btn',
+        variantClassName,
+        sizeClassName,
+        blockClassName,
+        input.className
+    ] ...input onClick("handleClick")>
+    <span>
+        <include(input.body)/>
+    </span>
+</button>

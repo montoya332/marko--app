@@ -17,7 +17,7 @@ coverage
 mb*.log
 logs
 
-
+*.marko.js
 *.csv
 *.dat
 *.out
