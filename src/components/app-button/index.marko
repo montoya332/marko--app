@@ -15,19 +15,19 @@ class {
         });
     }
 }
-
-$ var variantClassName = (input.variant && 'btn-' + input.variant);
-$ var sizeClassName = (input.size && 'btn-' + input.size);
-$ var blockClassName = (input.block && 'btn-block');
+$ const {variant, size, block, body, ...props} = input;
+$ const variantClassName = (variant && 'btn-' + variant);
+$ const sizeClassName = (size && 'btn-' + size);
+$ const blockClassName = (block && 'btn-block');
 
 <button class=[
         'btn',
         variantClassName,
         sizeClassName,
         blockClassName,
-        input.className
-    ] ...input onClick("handleClick")>
+        props.className
+    ] ...props onClick('handleClick')>
     <span>
-        <include(input.body)/>
+        <include(body)/>
     </span>
 </button>

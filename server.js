@@ -13,6 +13,7 @@ const express = require('express');
 const compression = require('compression'); // Provides gzip compression for the HTTP response
 const serveStatic = require('serve-static');
 const openBrowser = require('server-utils/openBrowser');
+const devMode = process.env.NODE_ENV !== 'production';
 
 // If the process was started using browser-refresh then enable
 // hot reloading for certain types of files to short-circuit
@@ -26,7 +27,7 @@ const port = process.env.PORT || 8080;
 const path = require('path');
 
 const viewsDir = path.join(__dirname, 'src');
-if (process.env.NODE_ENV !== 'production') {
+if (devMode) {
   require('marko/hot-reload').enable(); // Enable hot reloading in development
 
   require('fs').watch(viewsDir, { recursive: true }, function(event, filename) {
@@ -54,12 +55,7 @@ require('src/services/routes')(app);
 const indexTemplate = require('./src/pages/home/template.marko');
 
 app.get('/', function(req, res) {
-  indexTemplate.render(
-    {
-      name: 'Home'
-    },
-    res
-  );
+  indexTemplate.render({ name: 'Home' }, res);
 });
 
 app.listen(port, function(err) {
@@ -67,11 +63,12 @@ app.listen(port, function(err) {
     throw err;
   }
   console.log('Listening on port %d', port);
-
-  // The browser-refresh module uses this event to know that the
-  // process is ready to serve traffic after the restart
-  if (process.send) {
+  if (devMode) {
+    // The browser-refresh module uses this event to know that the
+    // process is ready to serve traffic after the restart
+    if (process.send) {
+      process.send('online');
+    }
     openBrowser('http://localhost:' + port);
-    process.send('online');
   }
 });
