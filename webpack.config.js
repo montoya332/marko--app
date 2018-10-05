@@ -1,5 +1,6 @@
 'use strict';
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = {
@@ -19,6 +20,17 @@ module.exports = {
             test: /\.marko$/,
             use: 'marko-loader'
         },
+         {
+      test: /\.m?js$/,
+      exclude: /(node_modules|bower_components)/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env'],
+          plugins: [require('@babel/plugin-proposal-object-rest-spread')]
+        }
+      }
+    },
         {
             test: /\.(sa|sc|c|le)ss$/,
             use: [
@@ -43,9 +55,9 @@ module.exports = {
         ]
     },
     plugins: [
-    new MiniCssExtractPlugin({
-        filename: devMode ? 'static/styles/[name].css' : 'static/styles/[name].[hash].css',
-        chunkFilename: devMode ? 'static/styles/[id].css' : 'static/styles/[id].[hash].css',
-    })
+        new MiniCssExtractPlugin({
+            filename: devMode ? 'static/styles/[name].css' : 'static/styles/[name].[hash].css',
+            chunkFilename: devMode ? 'static/styles/[id].css' : 'static/styles/[id].[hash].css',
+        }),
     ]
 };

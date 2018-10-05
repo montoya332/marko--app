@@ -2,14 +2,17 @@ require('app-module-path').addPath(__dirname);
 require('marko/express');
 require('marko/node-require');
 
-function requireNoOp(module, filename) { /* no-op */ }
+function requireNoOp(module, filename) {
+  /* no-op */
+}
 
 require.extensions['.less'] = requireNoOp;
 require.extensions['.css'] = requireNoOp;
 
-var express = require('express');
-var compression = require('compression'); // Provides gzip compression for the HTTP response
-var serveStatic = require('serve-static');
+const express = require('express');
+const compression = require('compression'); // Provides gzip compression for the HTTP response
+const serveStatic = require('serve-static');
+const openBrowser = require('server-utils/openBrowser');
 
 // If the process was started using browser-refresh then enable
 // hot reloading for certain types of files to short-circuit
@@ -17,9 +20,27 @@ var serveStatic = require('serve-static');
 // in development: https://www.npmjs.com/package/browser-refresh
 require('marko/browser-refresh').enable();
 
-var app = express();
+const app = express();
 
-var port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
+const path = require('path');
+
+const viewsDir = path.join(__dirname, 'src');
+if (process.env.NODE_ENV !== 'production') {
+  require('marko/hot-reload').enable(); // Enable hot reloading in development
+
+  require('fs').watch(viewsDir, { recursive: true }, function(event, filename) {
+    if (/\.marko$/.test(filename)) {
+      // Resolve the filename to a full template path:
+
+      const templatePath = path.join(viewsDir, filename);
+
+      console.log('Marko template modified: ', templatePath);
+
+      require('marko/hot-reload').handleFileModified(templatePath); // Pass along the *full* template path to marko
+    }
+  });
+}
 
 // Enable gzip compression for all HTTP responses
 app.use(compression());
@@ -30,17 +51,27 @@ app.use('/static', serveStatic(__dirname + '/static'));
 require('src/services/routes')(app);
 
 // Map the "/" route to the home page
-app.get('/', require('src/pages/home'));
+const indexTemplate = require('./src/pages/home/template.marko');
+
+app.get('/', function(req, res) {
+  indexTemplate.render(
+    {
+      name: 'Home'
+    },
+    res
+  );
+});
 
 app.listen(port, function(err) {
-    if (err) {
-        throw err;
-    }
-    console.log('Listening on port %d', port);
+  if (err) {
+    throw err;
+  }
+  console.log('Listening on port %d', port);
 
-    // The browser-refresh module uses this event to know that the
-    // process is ready to serve traffic after the restart
-    if (process.send) {
-        process.send('online');
-    }
+  // The browser-refresh module uses this event to know that the
+  // process is ready to serve traffic after the restart
+  if (process.send) {
+    openBrowser('http://localhost:' + port);
+    process.send('online');
+  }
 });
